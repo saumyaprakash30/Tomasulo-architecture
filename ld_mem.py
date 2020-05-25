@@ -43,6 +43,6 @@ class ldr_str:
         if "LDR" in ins[0]:
             self.pass_to_load(ins[1],ins[2].split("\n")[0])
         if "STR" in ins[0]:
-            self.pass_to_load(ins[1],ins[2].split("\n")[0])
+            self.pass_to_str(ins[1],ins[2].split("\n")[0])
 obj = ldr_str()
 obj.ldr_module("LDR F0 R0")
