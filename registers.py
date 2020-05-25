@@ -8,7 +8,7 @@ class Registers:
 
     def setRegister(self,reg,val):
         
-        regAddress = int(reg.split("r")[1])
+        regAddress = int(reg.split("R")[1])
         self.registers[regAddress] = val
     
     def printRegisters(self):
@@ -16,5 +16,5 @@ class Registers:
 
     def getRegisterVal(self,reg):
         
-        regAddress = int(reg.split("r")[1])
+        regAddress = int(reg.split("R")[1])
         return self.registers[regAddress]
