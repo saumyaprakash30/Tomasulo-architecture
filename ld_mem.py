@@ -32,6 +32,7 @@ class ldr_str:
         value=mem_raccess(src)
         self.Fr.setRegisterValue(dest,value)
         self.Fr.setBusyBit(dest,0)
+        print(Fr.getRegisterData("F0"))
         return dest,src
     def pass_to_str(self,dest,src):
         #this wait block is there to ensure no reads happens to that addr while writing altough fp register need not be marked busy
