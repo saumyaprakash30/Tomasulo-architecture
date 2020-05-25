@@ -19,24 +19,24 @@ def mem_waccess(dest,value):
     f.writelines(mem_arr)
 
 class ldr_str:
-    def __init__(Fr):
+    def __init__(self,F):
         self.wait_time=4
-        Fr = fpRegister()
+        self.Fr = F
     def wait(self,t):
         for i in range(0,t):
             print(i)
 
     def pass_to_load(self,dest,src):
-        Fr.setBusyBit(dest,1)
+        self.Fr.setBusyBit(dest,1)
         self.wait(self.wait_time)
         value=mem_raccess(src)
-        Fr.setRegisterValue(dest,value)
-        Fr.setBusyBit(dest,0)
-        print(Fr.getRegisterData("F0"))
+        self.Fr.setRegisterValue(dest,value)
+        self.Fr.setBusyBit(dest,0)
+        print(self.Fr.getRegisterData("F0"))
         return dest,src
     def pass_to_str(self,dest,src):
         #this wait block is there to ensure no reads happens to that addr while writing altough fp register need not be marked busy
-        value=Fr.getRegisterData(src)
+        value=self.Fr.getRegisterData(src)
         mem_waccess(dest,value)
         self.wait(self.wait_time)
     def ldr_module(self,instruction_ip):
@@ -45,5 +45,6 @@ class ldr_str:
             self.pass_to_load(ins[1],ins[2].split("\n")[0])
         if "STR" in ins[0]:
             self.pass_to_str(ins[1],ins[2].split("\n")[0])
+#test
 obj = ldr_str()
 obj.ldr_module("LDR F0 R0")
