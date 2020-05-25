@@ -40,7 +40,9 @@ class ldr_str:
         self.wait(self.wait_time)
     def ldr_module(self,instruction_ip):
         ins=instruction_ip.split(" ")
-        if ins[0]=="LDR":
+        if "LDR" in ins[0]:
             self.pass_to_load(ins[1],ins[2].split("\n")[0])
-        if ins[0]=="STR":
+        if "STR" in ins[0]:
             self.pass_to_load(ins[1],ins[2].split("\n")[0])
+obj = ldr_str()
+obj.ldr_module("LDR F0 R0")
