@@ -21,3 +21,10 @@ class i_f:
     def get_next_instruction(self):
         self.ic_count = self.ic_count +1
         return self.instructions[self.ic_count-1].split(" ")
+
+    def getNextInstructionString(self):
+        self.ic_count = self.ic_count +1
+        return self.instructions[self.ic_count-1]
+    
+    def decIc_count(self):
+        self.ic_count = self.ic_count-1
