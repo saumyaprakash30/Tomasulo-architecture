@@ -57,7 +57,7 @@ while(True):
     # add to resStation
     clock+=1
     ins = ifetch.get_next_instruction()
-    x=load_store.ldr_str_main(ins,clock)
+    load_store.ldr_str_main(ins,clock)
     if rstation.isFull(ins[0])==True:
         ifetch.decIc_count()
     else:

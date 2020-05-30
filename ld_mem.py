@@ -46,7 +46,6 @@ class ldr_str:
                 self.buffer.pop(i)
 
     def pass_to_str(self,dest,src,clock):
-        #this wait block is there to ensure no reads happens to that addr while writing altough fp register need not be marked busy
         value=self.Fr.getRegisterData(src)
         mem_waccess(dest,value)
 
