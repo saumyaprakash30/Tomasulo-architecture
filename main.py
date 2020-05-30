@@ -3,13 +3,14 @@ from registers import *
 from alu import *
 from reservationSt import *
 from insFetch import *
-
+from ld_mem import *
 
 fpr = fpRegister()
 reg = Registers()
 alu = ALU()
 rstation = ReservationSt()
 ifetch =i_f()
+load_store =ldr_str(fpr)
 
 clock=0
 
@@ -56,6 +57,7 @@ while(True):
     # add to resStation
     clock+=1
     ins = ifetch.get_next_instruction()
+    x=load_store.ldr_str_main(ins,clock)
     if rstation.isFull(ins[0])==True:
         ifetch.decIc_count()
     else:
