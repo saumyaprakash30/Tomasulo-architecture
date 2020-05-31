@@ -42,18 +42,24 @@ class ALU:
             if(ival[3]!=self.ADDTime):
                 self.adder[i][3]+=1
             else:
+                if ival[1][0]=='ADD':
+                    fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))+float(fpr.getRegisterData(ival[1][3])))
+                else:
+                    fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))-float(fpr.getRegisterData(ival[1][3])))
                 self.setAllBusyBit(fpr,ival[1],0)
                 self.removeIns(ival[0])
         for i,ival in enumerate(self.multiplier):
             if(ival[3]!=self.MULTime):
                 self.multiplier[i][3]+=1
             else:
+                fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))*float(fpr.getRegisterData(ival[1][3])))
                 self.setAllBusyBit(fpr,ival[1],0)
                 self.removeIns(ival[0])
         for i,ival in enumerate(self.divider):
             if(ival[3]!=self.DIVTime):
                 self.divider[i][3]+=1
             else:
+                fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))*float(fpr.getRegisterData(ival[1][3])))
                 self.setAllBusyBit(fpr,ival[1],0)
                 self.removeIns(ival[0])
         return fpr

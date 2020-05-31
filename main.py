@@ -30,19 +30,18 @@ def controlResStation():
         # call appropriate func that return complition status
         # status -> remove ins from resStation or continue
     
-    for i in rstation.astation:
-        #operand check
+    station = rstation.astation + rstation.mstation
+    station.sort()
+    for i in station:
         res = operandBusyCheck(i[1])
         if(res==False):
-            alu.addADDSUB(i[0],i[1],clock)
+            if i[1][0]=='ADD' or i[1][0]=='SUB':
+                alu.addADDSUB(i[0],i[1],clock)
+            elif i[1][0]=='MUL' or i[1][0]=='DIV':
+                alu.addMULDIV(i[0],i[1],clock)
             setAllBusyBit(i[1],1)
             rstation.removeInstruction(i[0],clock)
-    for i in rstation.mstation:
-        res = operandBusyCheck(i[1])
-        if(res==False):
-            alu.addMULDIV(i[0],i[1],clock)
-            setAllBusyBit(i[1],1)
-            rstation.removeInstruction(i[0],clock)
+
     rstation.printResStation()
     global fpr
     fpr = alu.incClock(fpr)
