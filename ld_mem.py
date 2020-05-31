@@ -37,24 +37,24 @@ class ldr_str:
         self.Fr.setBusyBit(dest,1)
         self.buffer.append([dest,src,clock])
         value=mem_raccess(src)
-        self.Fr.setRegisterValue(dest,value)
+        self.Fr.setRegisterValue(dest,float(value))
        # checks for finished ldr and sets busy bits to only those 0
        #removes them from ldr lists
-        for i,each in enumerate(self.buffer):
-            if each[2] - clock <= self.wait_time :
-                self.Fr.setBusyBit(each[0],0)
-                self.buffer.pop(i)
+        
 
     def pass_to_str(self,dest,src,clock):
         value=self.Fr.getRegisterData(src)
         mem_waccess(dest,value)
 
     def ldr_str_main(self,instruction_ip,clock):
-        ins=instruction_ip.split(" ")
+        ins = instruction_ip
+        for i,each in enumerate(self.buffer):
+            if clock-each[2] >= self.wait_time :
+                self.Fr.setBusyBit(each[0],0)
+                self.buffer.pop(i)
         if "LDR" in ins[0]:
-            self.pass_to_load(ins[1],ins[2].split("\n")[0],clock)
+            self.pass_to_load(ins[1],ins[2],clock)
         if "STR" in ins[0]:
-            self.pass_to_str(ins[1],ins[2].split("\n")[0],clock)
-        self.clk +=1
-#test
+            self.pass_to_str(ins[1],ins[2],clock)
 
+#test
