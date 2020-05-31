@@ -18,6 +18,11 @@ class ReservationSt:
             else:
                 return False
 
+    def isBothEmpty(self):
+        if len(self.astation) + len(self.mstation) >0:
+            return False
+        return True
+
     def isEmpty(self,station):
         if(station=='ADD' or station=='SUB'):
             if(len(self.astation)==0):
@@ -31,11 +36,13 @@ class ReservationSt:
                 return False
     
     def addInstruction(self,ins,clock):
+        # print("addins",ins)
         if(ins[0]=='ADD'  or ins[0]=='SUB'):
-            print("add ADD")
+            # print("added ADDSUB")
             self.astation.append([self.count,ins,clock])
             self.count+=1
         if(ins[0]=='MUL' or ins[0]=='DIV'):
+            # print("added MULDIV")
             self.mstation.append([self.count,ins,clock])
             self.count+=1
         
@@ -57,13 +64,14 @@ class ReservationSt:
 
 
     def printResStation(self):
+        print("-----reservation St.------")
         print("add sub:")
         for i in self.astation:
             print(i)
         print("mul div:")
         for i in self.mstation:
             print(i)
-
+        print("-----reservation St. end------")
 
 
 

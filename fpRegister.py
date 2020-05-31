@@ -15,7 +15,9 @@ class fpRegister:
             
     
     def printFPRegisters(self):
-        print("FPRegister",self.registers)
+        print("--------FP Reg.--------\n")
+        print(self.registers)
+        print("--------FP Reg. end --------\n")
 
     def setRegisterValue(self,fpReg,val):
         rAddress = int(fpReg.split("F")[1]);
@@ -26,6 +28,7 @@ class fpRegister:
 
     def getBusyBit(self,fpReg):
         rAddress = int(fpReg.split("F")[1]);
+        # print(fpReg,rAddress,self.registers)
         return self.registers[rAddress][1]
 
     def getRegisterData(self,fpReg):
