@@ -37,8 +37,9 @@ class ldr_str:
         #checks if register is already busy then does noting on that clock
         if len(self.buffer) >0 or len(self.store_buff)>0 :
             for each in self.buffer:
-                if each[0] == dest:
+                if each[0] == dest or each[0] == src:
                     return -1
+                
             for each in self.store_buff:
                 if each[0] == dest or each[0] == src:
                     return -1
@@ -106,8 +107,8 @@ class ldr_str:
                     self.Rr.setBusyBit(each[0],0)
                     self.buffer.pop(i)
         if "LDR" in ins[0]:
-            self.pass_to_load(ins[1],ins[2],clock)
+            return self.pass_to_load(ins[1],ins[2],clock)
         if "STR" in ins[0]:
-            self.pass_to_str(ins[1],ins[2],clock)
+            return self.pass_to_str(ins[1],ins[2],clock)
 
 #test
