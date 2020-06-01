@@ -11,7 +11,7 @@ reg = Registers()
 alu = ALU()
 rstation = ReservationSt()
 ifetch =i_f()
-mem = ldr_str(fpr)
+mem = ldr_str(fpr,reg)
 
 clock=0
 
@@ -112,12 +112,15 @@ while(True):
     if ifetch.isEmpty()==False:
 
         ins = ifetch.get_next_instruction()
-        mem.ldr_str_main(ins,clock)
+        mem_stat = mem.ldr_str_main(ins,clock)
         print("ins",ins)
         
         if ins[0]=='HLT':
             clock+=5;
             break;
+        if mem_stat == -1:
+            ifetch.decIc_count()
+
         if rstation.isFull(ins[0])==True:
             ifetch.decIc_count()
         else:
