@@ -10,6 +10,10 @@ class ALU:
         self.FSUBTime = 23
         self.FMULTime = 26
         self.DIVTime = 40
+        self.SHTime = 6
+        self.NANDTime = 3
+        self.HLTTime = 6
+        self.CMPTime =3
     
     def addADDSUB(self,_id,ins,initialClock):
         self.adder.append([_id,ins,initialClock,0])
@@ -32,18 +36,24 @@ class ALU:
                 self.divider.remove(i)
         
     def setAllBusyBit(self,r,ins,val):
-        if ins[1].find("F")!=-1:
-            r.setBusyBit(ins[1],val)
-        if ins[2].find("F")!=-1:
-            r.setBusyBit(ins[2],val)
-        if ins[3].find("F")!=-1:
-            r.setBusyBit(ins[3],val)
-        if ins[1].find("R")!=-1:
-            r.setBusyBit(ins[1],val)
-        if ins[2].find("R")!=-1:
-            r.setBusyBit(ins[2],val)
-        if ins[3].find("R")!=-1:
-            r.setBusyBit(ins[3],val)
+        if ins[0]=="CMP":
+            if ins[1].find("R")!=-1:
+                r.setBusyBit(ins[1],val)
+            if ins[2].find("R")!=-1:
+                r.setBusyBit(ins[2],val)
+        else:
+            if ins[1].find("F")!=-1:
+                r.setBusyBit(ins[1],val)
+            if ins[2].find("F")!=-1:
+                r.setBusyBit(ins[2],val)
+            if ins[3].find("F")!=-1:
+                r.setBusyBit(ins[3],val)
+            if ins[1].find("R")!=-1:
+                r.setBusyBit(ins[1],val)
+            if ins[2].find("R")!=-1:
+                r.setBusyBit(ins[2],val)
+            if ins[3].find("R")!=-1:
+                r.setBusyBit(ins[3],val)
         # print("fprPrint inside alu",fpr.printFPRegisters())
 
     def incClock(self,fpr,reg):
@@ -72,6 +82,34 @@ class ALU:
                         reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2]))-int(reg.getRegisterVal(ival[1][3]))-1)
                     self.setAllBusyBit(reg,ival[1],0)
                     self.removeIns(ival[0])
+            elif ival[1][0]=='SHR' or ival[1][0]=='LHR':
+                if(ival[3]!=self.SHTime):
+                    self.adder[i][3]+=1
+                else:
+                    if ival[1][0]=='SHR':
+                        reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2])) >> int(reg.getRegisterVal(ival[1][3])))
+                    if ival[1][0]=='LHR':
+                        reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2])) << int(reg.getRegisterVal(ival[1][3])))
+                    self.setAllBusyBit(reg,ival[1],0)
+                    self.removeIns(ival[0])
+            elif ival[1][0]=='NAND' or ival[1][0]=='XOR':
+                if(ival[3]!=self.NANDTime):
+                    self.adder[i][3]+=1
+                else:
+                    if ival[1][0]=='NAND':
+                        reg.setRegister(ival[1][1],~(int(reg.getRegisterVal(ival[1][2])) & int(reg.getRegisterVal(ival[1][3]))))
+                    if ival[1][0]=='XOR':
+                        reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2])) ^ int(reg.getRegisterVal(ival[1][3])))
+                    self.setAllBusyBit(reg,ival[1],0)
+                    self.removeIns(ival[0])
+            elif ival[1][0]=='CMP':
+                if(ival[3]!=self.CMPTime):
+                    self.adder[i][3]+=1
+                else:
+                    reg.setRegister(ival[1][1],~(int(reg.getRegisterVal(ival[1][2]))))
+                    self.setAllBusyBit(reg,ival[1],0)
+                    self.removeIns(ival[0])
+
 
         for i,ival in enumerate(self.multiplier):
             if ival[1][0]=='FMUL':
@@ -102,7 +140,7 @@ class ALU:
             
     def printALU(self):
         print("-----ALU-----")
-        print("adderSubtractor:")
+        print("adderSubtractorLogic:")
         for i in self.adder:
             print(i)
         print("Multiplier:")
