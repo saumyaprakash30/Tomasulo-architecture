@@ -24,16 +24,20 @@ class ldr_str:
         self.Fr = F
         self.Rr = R
         self.buffer = []
+        self.store_buff = []
     def wait(self,t):
         for i in range(0,t):
             print(i)
 
     def pass_to_load(self,dest,src,clock):
         #checks if register is already busy then does noting on that clock
-        if len(self.buffer) >0 :
+        if len(self.buffer) >0 or len(self.store_buff)>0 :
             for each in self.buffer:
                 if each[0] == dest:
-                    return
+                    return -1
+            for each in self.store_buff:
+                if each[0] == dest or each[0] == src:
+                    return -1
         #register requested is free then do the following
         print(src,dest)
         #float ops:
@@ -52,12 +56,40 @@ class ldr_str:
         
 
     def pass_to_str(self,dest,src,clock):
-        value=self.Fr.getRegisterData(src)
-        mem_waccess(dest,value)
+        for each in self.store_buff:
+            if each[0] == dest:
+                return -1
+        if "F" in src :
+            if self.Fr.getBusyBit(src) == 0 and self.Rr.getBusyBit(dest)==0:
+                self.Rr.setBusyBit(src,1)
+                value=self.Fr.getRegisterData(src)
+                mem_waccess(dest,value)
+                self.store_buff.append([dest,src,clock])
+            else :
+                return -1
+        if "R" in src :
+            if self.Rr.getBusyBit(src) == 0 and self.Rr.getBusyBit(dest)==0:
+                self.Rr.setBusyBit(src,1)
+                value=self.Rr.getRegisterVal(src)
+                mem_waccess(dest,value)
+                self.store_buff.append([dest,src,clock])
+            else :
+                return -1
+
+
+        
 
     def ldr_str_main(self,instruction_ip,clock):
         ins = instruction_ip
         for i,each in enumerate(self.buffer):
+            if clock-each[2] >= self.wait_time :
+                if "F"in each[0]:
+                    self.Fr.setBusyBit(each[0],0)
+                    self.buffer.pop(i)
+                if "R" in each[0]:
+                    self.Rr.setBusyBit(each[0],0)
+                    self.buffer.pop(i)
+        for i,each in enumerate(self.store_buff):
             if clock-each[2] >= self.wait_time :
                 if "F"in each[0]:
                     self.Fr.setBusyBit(each[0],0)
