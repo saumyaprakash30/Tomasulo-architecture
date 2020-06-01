@@ -15,7 +15,7 @@ class fpRegister:
             
     
     def printFPRegisters(self):
-        print("--------FP Reg.--------\n")
+        print("--------FP Reg.--------")
         print(self.registers)
         print("--------FP Reg. end --------\n")
 

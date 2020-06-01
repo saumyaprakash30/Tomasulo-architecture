@@ -37,11 +37,11 @@ class ReservationSt:
     
     def addInstruction(self,ins,clock):
         # print("addins",ins)
-        if(ins[0]=='ADD'  or ins[0]=='SUB'):
+        if(ins[0]=='ADD'  or ins[0]=='SUB' or ins[0]=='FADD' or ins[0]=='FSUB' or ins[0]=='SBB' or ins[0]=='ADC' ):
             # print("added ADDSUB")
             self.astation.append([self.count,ins,clock])
             self.count+=1
-        if(ins[0]=='MUL' or ins[0]=='DIV'):
+        if(ins[0]=='MUL' or ins[0]=='DIV' or ins[0]=='FMUL'):
             # print("added MULDIV")
             self.mstation.append([self.count,ins,clock])
             self.count+=1
@@ -71,7 +71,7 @@ class ReservationSt:
         print("mul div:")
         for i in self.mstation:
             print(i)
-        print("-----reservation St. end------")
+        print("-----reservation St. end------\n")
 
 
 

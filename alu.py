@@ -3,9 +3,12 @@ class ALU:
         self.adder=[]
         self.multiplier=[]
         self.divider=[]
-        self.ADDTime = 4
-        self.SUBTime = 4
-        self.MULTime = 16
+        self.ADDTime = 8
+        self.SUBTime = 8
+        self.MULTime = 13
+        self.FADDTime = 23
+        self.FSUBTime = 23
+        self.FMULTime = 26
         self.DIVTime = 40
     
     def addADDSUB(self,_id,ins,initialClock):
@@ -28,45 +31,77 @@ class ALU:
             if i[0]==_id:
                 self.divider.remove(i)
         
-    def setAllBusyBit(self,fpr,ins,val):
+    def setAllBusyBit(self,r,ins,val):
         if ins[1].find("F")!=-1:
-            fpr.setBusyBit(ins[1],val)
+            r.setBusyBit(ins[1],val)
         if ins[2].find("F")!=-1:
-            fpr.setBusyBit(ins[2],val)
+            r.setBusyBit(ins[2],val)
         if ins[3].find("F")!=-1:
-            fpr.setBusyBit(ins[3],val)
+            r.setBusyBit(ins[3],val)
+        if ins[1].find("R")!=-1:
+            r.setBusyBit(ins[1],val)
+        if ins[2].find("R")!=-1:
+            r.setBusyBit(ins[2],val)
+        if ins[3].find("R")!=-1:
+            r.setBusyBit(ins[3],val)
         # print("fprPrint inside alu",fpr.printFPRegisters())
 
-    def incClock(self,fpr):
+    def incClock(self,fpr,reg):
         for i,ival in enumerate(self.adder):
-            if(ival[3]!=self.ADDTime):
-                self.adder[i][3]+=1
-            else:
-                if ival[1][0]=='ADD':
-                    fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))+float(fpr.getRegisterData(ival[1][3])))
+            if ival[1][0]=='FADD' or ival[1][0]=='FSUB':
+                if(ival[3]!=self.FADDTime):
+                    self.adder[i][3]+=1
                 else:
-                    fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))-float(fpr.getRegisterData(ival[1][3])))
-                self.setAllBusyBit(fpr,ival[1],0)
-                self.removeIns(ival[0])
+                    if ival[1][0]=='FADD':
+                        fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))+float(fpr.getRegisterData(ival[1][3])))
+                    else:
+                        fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))-float(fpr.getRegisterData(ival[1][3])))
+                    self.setAllBusyBit(fpr,ival[1],0)
+                    self.removeIns(ival[0])
+            elif ival[1][0]=='ADD' or ival[1][0]=='SUB' or ival[1][0]=='ADC' or ival[1][0]=='SBB':
+                if(ival[3]!=self.ADDTime):
+                    self.adder[i][3]+=1
+                else:
+                    if ival[1][0]=='ADD':
+                        reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2]))+int(reg.getRegisterVal(ival[1][3])))
+                    if ival[1][0]=='ADC':
+                        reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2]))+int(reg.getRegisterVal(ival[1][3]))+1)
+                    if ival[1][0]=='SUB':
+                        reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2]))-int(reg.getRegisterVal(ival[1][3])))
+                    if ival[1][0]=='SBB':
+                        reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2]))-int(reg.getRegisterVal(ival[1][3]))-1)
+                    self.setAllBusyBit(reg,ival[1],0)
+                    self.removeIns(ival[0])
+
         for i,ival in enumerate(self.multiplier):
-            if(ival[3]!=self.MULTime):
-                self.multiplier[i][3]+=1
-            else:
-                fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))*float(fpr.getRegisterData(ival[1][3])))
-                self.setAllBusyBit(fpr,ival[1],0)
-                self.removeIns(ival[0])
+            if ival[1][0]=='FMUL':
+                if(ival[3]!=self.FMULTime):
+                    self.multiplier[i][3]+=1
+                else:
+                    fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))*float(fpr.getRegisterData(ival[1][3])))
+                    self.setAllBusyBit(fpr,ival[1],0)
+                    self.removeIns(ival[0])
+
+            if ival[1][0]=='MUL':
+                if(ival[3]!=self.MULTime):
+                    self.multiplier[i][3]+=1
+                else:
+                    reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2]))*int(reg.getRegisterVal(ival[1][3])))
+                    self.setAllBusyBit(reg,ival[1],0)
+                    self.removeIns(ival[0])
+
         for i,ival in enumerate(self.divider):
             if(ival[3]!=self.DIVTime):
                 self.divider[i][3]+=1
             else:
                 fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))*float(fpr.getRegisterData(ival[1][3])))
-                self.setAllBusyBit(fpr,ival[1],0)
+                self.setAllBusyBit(reg,ival[1],0)
                 self.removeIns(ival[0])
-        return fpr
+        return fpr,reg
         
             
     def printALU(self):
-        print("-----ALU-----\n")
+        print("-----ALU-----")
         print("adderSubtractor:")
         for i in self.adder:
             print(i)

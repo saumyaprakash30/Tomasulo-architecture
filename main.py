@@ -23,6 +23,12 @@ def setAllBusyBit(ins,val):
         fpr.setBusyBit(ins[2],val)
     if ins[3].find("F")!=-1:
         fpr.setBusyBit(ins[3],val)
+    if ins[1].find("R")!=-1:
+        reg.setBusyBit(ins[1],val)
+    if ins[2].find("R")!=-1:
+        reg.setBusyBit(ins[2],val)
+    if ins[3].find("R")!=-1:
+        reg.setBusyBit(ins[3],val)
 
 def controlResStation():
     # for each ins
@@ -34,19 +40,21 @@ def controlResStation():
     station.sort()
     for i in station:
         res = operandBusyCheck(i[1])
+        print("res",res)
         if(res==False):
-            if i[1][0]=='ADD' or i[1][0]=='SUB':
+            if i[1][0]=='ADD' or i[1][0]=='SUB' or i[1][0]=='SBB' or i[1][0]=='ADC' or i[1][0]=='FADD' or i[1][0]=='FSUB' :
                 alu.addADDSUB(i[0],i[1],clock)
-            elif i[1][0]=='MUL' or i[1][0]=='DIV':
+            elif i[1][0]=='MUL' or i[1][0]=='DIV' or i[1][0]=='FMUL':
                 alu.addMULDIV(i[0],i[1],clock)
             setAllBusyBit(i[1],1)
             rstation.removeInstruction(i[0],clock)
 
     rstation.printResStation()
-    global fpr
-    fpr = alu.incClock(fpr)
+    global fpr,reg
+    fpr,reg = alu.incClock(fpr,reg)
     alu.printALU()
     fpr.printFPRegisters()
+    reg.printRegisters()
 
     
 
@@ -62,6 +70,15 @@ def operandBusyCheck(ins):
             return True
     if ins[3].find("F")!=-1:
         if fpr.getBusyBit(ins[3])==1:
+            return True
+    if ins[1].find("R")!=-1:
+        if reg.getBusyBit(ins[1])==1:
+            return True
+    if ins[2].find("R")!=-1:
+        if reg.getBusyBit(ins[2])==1:
+            return True
+    if ins[3].find("R")!=-1:
+        if reg.getBusyBit(ins[3])==1:
             return True
     return busy
     
