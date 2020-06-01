@@ -1,3 +1,7 @@
+
+'''
+Author: Saumya Prakash(ced17i043) and Bazif Rasool(ced17i015)
+'''
 class fpRegister:
     def __init__(self):
         file = open('./fpRegister.txt')

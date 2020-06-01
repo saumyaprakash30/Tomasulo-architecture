@@ -1,3 +1,7 @@
+'''
+Author: Saumya Prakash(ced17i043) and Bazif Rasool(ced17i015)
+'''
+
 from fpRegister import *
 from registers import *
 from alu import *

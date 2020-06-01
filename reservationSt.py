@@ -1,3 +1,6 @@
+'''
+Author: Saumya Prakash(ced17i043) and Bazif Rasool(ced17i015)
+'''
 class ReservationSt:
     def __init__(self):
         self.astation = []  #add sum station

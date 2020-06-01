@@ -1,4 +1,7 @@
 #opens Inst.txt reads instructions and remove whitespaces
+'''
+Author: Saumya Prakash(ced17i043) and Bazif Rasool(ced17i015)
+'''
 class i_f:
     def __init__(self):
         inst = open("Inst.txt","r").readlines()

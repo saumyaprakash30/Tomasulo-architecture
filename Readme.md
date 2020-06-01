@@ -16,3 +16,8 @@
 
 ## Run Tomasulo's Algorithm
 ### python main.py
+
+
+# Author: 
+## Saumya Prakash(ced17i043) and Bazif Rasool(ced17i015)
+## IIITDM, Chennai
