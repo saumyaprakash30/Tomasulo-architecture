@@ -115,11 +115,11 @@ while(True):
     clock+=1
     print("--------------------clock : ",clock,"-------------------")
     print('\n')
-    mem.ldr_str_main(["na","na","na"],clock)
+    mem.ldr_str_main(["na","na","na"],clock,processedIns)
     if ifetch.isEmpty()==False:
 
         ins = ifetch.get_next_instruction()
-        mem_stat = mem.ldr_str_main(ins,clock)
+        mem_stat = mem.ldr_str_main(ins,clock,processedIns)
         print("ins",ins)
         
         if ins[0]=='HLT':

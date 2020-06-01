@@ -83,22 +83,26 @@ class ldr_str:
 
         
 
-    def ldr_str_main(self,instruction_ip,clock):
+    def ldr_str_main(self,instruction_ip,clock,processed_ins):
         ins = instruction_ip
         for i,each in enumerate(self.buffer):
             if clock-each[2] >= self.wait_time :
                 if "F"in each[0]:
+                    processed_ins.append([["LDR",each[0],each[1]],each[2],clock])
                     self.Fr.setBusyBit(each[0],0)
                     self.buffer.pop(i)
                 if "R" in each[0]:
+                    processed_ins.append([["LDR",each[0],each[1]],each[2],clock])
                     self.Rr.setBusyBit(each[0],0)
                     self.buffer.pop(i)
         for i,each in enumerate(self.store_buff):
             if clock-each[2] >= self.wait_time :
                 if "F"in each[0]:
+                    processed_ins.append([["STR",each[0],each[1]],each[2],clock])
                     self.Fr.setBusyBit(each[0],0)
                     self.buffer.pop(i)
                 if "R" in each[0]:
+                    processed_ins.append([["STR",each[0],each[1]],each[2],clock])
                     self.Rr.setBusyBit(each[0],0)
                     self.buffer.pop(i)
         if "LDR" in ins[0]:
