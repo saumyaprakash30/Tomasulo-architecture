@@ -46,7 +46,7 @@ class ldr_str:
             self.Rr.setBusyBit(dest,1)
             self.buffer.append([dest,src,clock])
             value=mem_raccess(src)
-            self.Rr.setRegisterValue(dest,float(value))
+            self.Rr.setRegister(dest,float(value))
        # checks for finished ldr and sets busy bits to only those 0
        #removes them from ldr lists
         
@@ -71,5 +71,3 @@ class ldr_str:
             self.pass_to_str(ins[1],ins[2],clock)
 
 #test
-l = ldr_str(fpRegister(),Registers())
-l.ldr_str_main(["LDR","F0","R0"],0)
