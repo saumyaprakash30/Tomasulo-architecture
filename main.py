@@ -19,6 +19,8 @@ mem = ldr_str(fpr,reg)
 
 processedIns = []
 
+allIns = ifetch.getAllIns()
+
 clock=0
 
 def setAllBusyBit(ins,val):
@@ -138,7 +140,16 @@ while(True):
     #end process
     if rstation.isBothEmpty() and ifetch.isEmpty() and alu.isAllEmpty():
         print("*******FINAL*********")
+        
+        print("\t\tins\t\t\t\t\tstart\t\tend")
         for i in processedIns:
+            
+            if(len(i)==3):
+                print(str(i[0])+'\t\t\t\t'+str(i[1])+'\t\t'+str(i[2]))
+            else:
+                print(str(i[1])+'\t\t'+str(i[2])+'\t\t'+str(i[3]+i[2]))
+        print("\n--Instruction order given--")
+        for i in allIns:
             print(i)
         break
 

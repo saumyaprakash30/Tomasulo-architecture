@@ -10,7 +10,10 @@ Insert integer register value in register.txt. Integer value per line where firs
 Insert all the values in mem_vals.txt. Integer or float value per line where F0 correspond to 1st line , and so on. 
 
 ### Run Tomasulo's Algorithm
-python main.py
+open Terminal
+python main.py > output.txt
+
+this will save the output in oputput.txt file.
 
 
 ## Author: 

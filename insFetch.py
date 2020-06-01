@@ -37,3 +37,6 @@ class i_f:
     
     def decIc_count(self):
         self.ic_count = self.ic_count-1
+
+    def getAllIns(self):
+        return self.instructions
