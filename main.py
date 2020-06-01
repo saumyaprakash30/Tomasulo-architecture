@@ -17,6 +17,8 @@ rstation = ReservationSt()
 ifetch =i_f()
 mem = ldr_str(fpr,reg)
 
+processedIns = []
+
 clock=0
 
 def setAllBusyBit(ins,val):
@@ -53,15 +55,15 @@ def controlResStation():
         print("res",res)
         if(res==False):
             if i[1][0]=='ADD' or i[1][0]=='SUB' or i[1][0]=='SBB' or i[1][0]=='ADC' or i[1][0]=='FADD' or i[1][0]=='FSUB' or i[1][0]=='SHR' or i[1][0]=='LHR' or i[1][0]=='NAND' or i[1][0]=='XOR' or i[1][0]=='CMP'  :
-                alu.addADDSUB(i[0],i[1],clock)
+                alu.addADDSUB(i[0],i[1],clock,0,i[2])
             elif i[1][0]=='MUL' or i[1][0]=='DIV' or i[1][0]=='FMUL':
-                alu.addMULDIV(i[0],i[1],clock)
+                alu.addMULDIV(i[0],i[1],clock,0,i[2])
             setAllBusyBit(i[1],1)
             rstation.removeInstruction(i[0],clock)
 
     rstation.printResStation()
-    global fpr,reg
-    fpr,reg = alu.incClock(fpr,reg)
+    global fpr,reg,processedIns
+    fpr,reg,processedIns = alu.incClock(fpr,reg,processedIns)
     alu.printALU()
     fpr.printFPRegisters()
     reg.printRegisters()
@@ -111,7 +113,8 @@ while(True):
     # add to resStation
     
     clock+=1
-    print("--------------------clock : ",clock,"-------------------\n")
+    print("--------------------clock : ",clock,"-------------------")
+    print('\n')
     mem.ldr_str_main(["na","na","na"],clock)
     if ifetch.isEmpty()==False:
 
@@ -134,6 +137,9 @@ while(True):
     
     #end process
     if rstation.isBothEmpty() and ifetch.isEmpty() and alu.isAllEmpty():
+        print("*******FINAL*********")
+        for i in processedIns:
+            print(i)
         break
 
     # break

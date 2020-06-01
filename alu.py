@@ -19,14 +19,14 @@ class ALU:
         self.HLTTime = 6
         self.CMPTime =3
     
-    def addADDSUB(self,_id,ins,initialClock):
-        self.adder.append([_id,ins,initialClock,0])
+    def addADDSUB(self,_id,ins,initialClock,countClock,resStClock):
+        self.adder.append([_id,ins,initialClock,0,resStClock])
     
-    def addMULDIV(self,_id,ins,initialClock):
+    def addMULDIV(self,_id,ins,initialClock,countClock,resStClock):
         if ins[0]=='DIV':
-            self.divider.append([_id,ins,initialClock,0])
+            self.divider.append([_id,ins,initialClock,0,resStClock])
         else:
-            self.multiplier.append([_id,ins,initialClock,0])
+            self.multiplier.append([_id,ins,initialClock,0,resStClock])
 
     def removeIns(self,_id):
         for i in self.adder:
@@ -60,7 +60,7 @@ class ALU:
                 r.setBusyBit(ins[3],val)
         # print("fprPrint inside alu",fpr.printFPRegisters())
 
-    def incClock(self,fpr,reg):
+    def incClock(self,fpr,reg,processedIns):
         for i,ival in enumerate(self.adder):
             if ival[1][0]=='FADD' or ival[1][0]=='FSUB':
                 if(ival[3]!=self.FADDTime):
@@ -71,6 +71,7 @@ class ALU:
                     else:
                         fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))-float(fpr.getRegisterData(ival[1][3])))
                     self.setAllBusyBit(fpr,ival[1],0)
+                    processedIns.append(ival)
                     self.removeIns(ival[0])
             elif ival[1][0]=='ADD' or ival[1][0]=='SUB' or ival[1][0]=='ADC' or ival[1][0]=='SBB':
                 if(ival[3]!=self.ADDTime):
@@ -85,6 +86,7 @@ class ALU:
                     if ival[1][0]=='SBB':
                         reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2]))-int(reg.getRegisterVal(ival[1][3]))-1)
                     self.setAllBusyBit(reg,ival[1],0)
+                    processedIns.append(ival)
                     self.removeIns(ival[0])
             elif ival[1][0]=='SHR' or ival[1][0]=='LHR':
                 if(ival[3]!=self.SHTime):
@@ -95,6 +97,7 @@ class ALU:
                     if ival[1][0]=='LHR':
                         reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2])) << int(reg.getRegisterVal(ival[1][3])))
                     self.setAllBusyBit(reg,ival[1],0)
+                    processedIns.append(ival)
                     self.removeIns(ival[0])
             elif ival[1][0]=='NAND' or ival[1][0]=='XOR':
                 if(ival[3]!=self.NANDTime):
@@ -105,6 +108,7 @@ class ALU:
                     if ival[1][0]=='XOR':
                         reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2])) ^ int(reg.getRegisterVal(ival[1][3])))
                     self.setAllBusyBit(reg,ival[1],0)
+                    processedIns.append(ival)
                     self.removeIns(ival[0])
             elif ival[1][0]=='CMP':
                 if(ival[3]!=self.CMPTime):
@@ -112,6 +116,7 @@ class ALU:
                 else:
                     reg.setRegister(ival[1][1],~(int(reg.getRegisterVal(ival[1][2]))))
                     self.setAllBusyBit(reg,ival[1],0)
+                    processedIns.append(ival)
                     self.removeIns(ival[0])
 
 
@@ -122,6 +127,7 @@ class ALU:
                 else:
                     fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))*float(fpr.getRegisterData(ival[1][3])))
                     self.setAllBusyBit(fpr,ival[1],0)
+                    processedIns.append(ival)
                     self.removeIns(ival[0])
 
             if ival[1][0]=='MUL':
@@ -130,6 +136,7 @@ class ALU:
                 else:
                     reg.setRegister(ival[1][1],int(reg.getRegisterVal(ival[1][2]))*int(reg.getRegisterVal(ival[1][3])))
                     self.setAllBusyBit(reg,ival[1],0)
+                    processedIns.append(ival)
                     self.removeIns(ival[0])
 
         for i,ival in enumerate(self.divider):
@@ -138,8 +145,9 @@ class ALU:
             else:
                 fpr.setRegisterValue(ival[1][1],float(fpr.getRegisterData(ival[1][2]))*float(fpr.getRegisterData(ival[1][3])))
                 self.setAllBusyBit(reg,ival[1],0)
+                processedIns.append(ival)
                 self.removeIns(ival[0])
-        return fpr,reg
+        return fpr,reg,processedIns
         
             
     def printALU(self):
