@@ -11,7 +11,7 @@ reg = Registers()
 alu = ALU()
 rstation = ReservationSt()
 ifetch =i_f()
-mem = ldr_str(fpr)
+mem = ldr_str(fpr,reg)
 
 clock=0
 
