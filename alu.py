@@ -43,21 +43,21 @@ class ALU:
         if ins[0]=="CMP":
             if ins[1].find("R")!=-1:
                 r.setBusyBit(ins[1],val)
-            if ins[2].find("R")!=-1:
-                r.setBusyBit(ins[2],val)
+            # if ins[2].find("R")!=-1:
+            #     r.setBusyBit(ins[2],val)
         else:
             if ins[1].find("F")!=-1:
                 r.setBusyBit(ins[1],val)
-            if ins[2].find("F")!=-1:
-                r.setBusyBit(ins[2],val)
-            if ins[3].find("F")!=-1:
-                r.setBusyBit(ins[3],val)
+            # if ins[2].find("F")!=-1:
+            #     r.setBusyBit(ins[2],val)
+            # if ins[3].find("F")!=-1:
+            #     r.setBusyBit(ins[3],val)
             if ins[1].find("R")!=-1:
                 r.setBusyBit(ins[1],val)
-            if ins[2].find("R")!=-1:
-                r.setBusyBit(ins[2],val)
-            if ins[3].find("R")!=-1:
-                r.setBusyBit(ins[3],val)
+            # if ins[2].find("R")!=-1:
+            #     r.setBusyBit(ins[2],val)
+            # if ins[3].find("R")!=-1:
+            #     r.setBusyBit(ins[3],val)
         # print("fprPrint inside alu",fpr.printFPRegisters())
 
     def incClock(self,fpr,reg,processedIns):

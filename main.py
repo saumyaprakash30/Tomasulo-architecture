@@ -27,21 +27,21 @@ def setAllBusyBit(ins,val):
     if ins[0]=="CMP":
         if ins[1].find("R")!=-1:
             reg.setBusyBit(ins[1],val)
-        if ins[2].find("R")!=-1:
-            reg.setBusyBit(ins[2],val)
+        # if ins[2].find("R")!=-1:
+        #     reg.setBusyBit(ins[2],val)
     else:
         if ins[1].find("F")!=-1:
             fpr.setBusyBit(ins[1],val)
-        if ins[2].find("F")!=-1:
-            fpr.setBusyBit(ins[2],val)
-        if ins[3].find("F")!=-1:
-            fpr.setBusyBit(ins[3],val)
+        # if ins[2].find("F")!=-1:
+        #     fpr.setBusyBit(ins[2],val)
+        # if ins[3].find("F")!=-1:
+        #     fpr.setBusyBit(ins[3],val)
         if ins[1].find("R")!=-1:
             reg.setBusyBit(ins[1],val)
-        if ins[2].find("R")!=-1:
-            reg.setBusyBit(ins[2],val)
-        if ins[3].find("R")!=-1:
-            reg.setBusyBit(ins[3],val)
+        # if ins[2].find("R")!=-1:
+        #     reg.setBusyBit(ins[2],val)
+        # if ins[3].find("R")!=-1:
+        #     reg.setBusyBit(ins[3],val)
 
 def controlResStation():
     # for each ins
@@ -142,6 +142,7 @@ while(True):
         print("*******FINAL*********")
         
         print("\t\tins\t\t\t\t\tstart\t\tend")
+        processedIns.sort()
         for i in processedIns:
             
             if(len(i)==3):
@@ -151,6 +152,7 @@ while(True):
         print("\n--Instruction order given--")
         for i in allIns:
             print(i)
+        
         break
 
     # break
