@@ -13,7 +13,7 @@ Insert all the values in mem_vals.txt. Integer or float value per line where F0 
 open Terminal
 python main.py > output.txt
 
-this will save the output in oputput.txt file.
+this will save the output in output.txt file.
 
 
 ## Author: 
