@@ -140,20 +140,38 @@ while(True):
     #end process
     if rstation.isBothEmpty() and ifetch.isEmpty() and alu.isAllEmpty():
         print("*******FINAL*********")
-        
-        print("\t\tins\t\t\t\t\tstart\t\tend")
-        processedIns.sort()
+        output =[]
+        print("\tins\t\t\tstart\t\tend")
+        # processedIns.sort()
         for i in processedIns:
-            
+            temp = []
             if(len(i)==3):
-                print(str(i[0])+'\t\t\t\t'+str(i[1])+'\t\t'+str(i[2]))
+                s = ' '
+                print(s.join((i[0]))+'\t\t\t'+str(i[1])+'\t\t'+str(i[2]))
+                output.append([s.join((i[0])),(i[1]),str(i[2])])
             else:
-                print(str(i[1])+'\t\t'+str(i[2])+'\t\t'+str(i[3]+i[2]))
+                s= ' '
+                print(s.join((i[1]))+'\t\t'+str(i[2])+'\t\t'+str(i[3]+i[2]))
+                output.append([s.join((i[1])),(i[2]),str(i[3]+i[2])])
         print("\n--Instruction order given--")
         for i in allIns:
             print(i)
-        
+        # print("ins&tstart&end\\\\")
+        # processedIns.sort()
+        # for i in processedIns:
+            
+        #     if(len(i)==3):
+        #         s = ' '
+        #         print(s.join((i[0]))+'&'+str(i[1])+'&'+str(i[2])+'\\\\')
+        #     else:
+        #         s= ' '
+        #         print(s.join((i[1]))+'&'+str(i[2])+'&'+str(i[3]+i[2])+'\\\\')
+        # print(output)
+        # output.sort(key = lambda x : x[1])
+        # for i in output:
+        #     print((i[0])+'&'+str(i[1])+'&'+str(i[2])+'\\\\\\hline')
         break
 
     # break
     # print("inwhile")
+
